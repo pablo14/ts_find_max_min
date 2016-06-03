@@ -1,0 +1,24 @@
+
+
+
+t1=read.csv("ts_1.txt")
+t2=read.csv("ts_2.txt")
+t1_t=t(t1)[1,]
+plot_ly(y=t1_t)
+t2_t=t(t2)[1,]
+plot_ly(y=t2_t)
+
+temp_s_1=stl(ts(t1_t, frequency=50), "periodic")
+temp_s_2=stl(ts(t2_t, frequency=50), "periodic")
+
+
+
+## INFLECTION POINT
+points_max_ts_1=which(diff(sign(diff(ref_1)))==-2)+1
+points_min_ts_1=which(diff(sign(diff(-ref_1)))==-2)+1
+
+plot(ref_1, type = 'l')
+abline(v=points_max_ts_1)
+abline(v=points_min_ts_1)
+
+# link: http://stackoverflow.com/questions/6836409/finding-local-maxima-and-minima
