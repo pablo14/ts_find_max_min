@@ -1,24 +1,85 @@
+Finding max and min in a time series
+======
+  Time series has maximum and minimum points as general patterns, however sometimes the serie has some noise hiding the general behavior.
 
+  In this post, we will smoothing the time series -reducing noise- to maximize the information, and then an easy formula will be applied to find and plot max and min points, and thus, characterize the time series.
 
+##### What we have
+```{r}
+# install.packages("plotly")
+library(plotly)
 
+# reading data sources, 2 time series
 t1=read.csv("ts_1.txt")
 t2=read.csv("ts_2.txt")
-t1_t=t(t1)[1,]
-plot_ly(y=t1_t)
-t2_t=t(t2)[1,]
-plot_ly(y=t2_t)
-
-temp_s_1=stl(ts(t1_t, frequency=50), "periodic")
-temp_s_2=stl(ts(t2_t, frequency=50), "periodic")
 
 
+# plotting...
+plot(t1$ts1, type = 'l')
+plot(t2$ts2, type = 'l')
 
-## INFLECTION POINT
-points_max_ts_1=which(diff(sign(diff(ref_1)))==-2)+1
-points_min_ts_1=which(diff(sign(diff(-ref_1)))==-2)+1
+```
 
-plot(ref_1, type = 'l')
-abline(v=points_max_ts_1)
-abline(v=points_min_ts_1)
+As you can see, there are many peaks but intuitevly you can imagine a more smoother line crossing in the middle of the points. This can achieved by appling an *Seasonal Trend Decomoposition*.
 
-# link: http://stackoverflow.com/questions/6836409/finding-local-maxima-and-minima
+#### Smothing the series
+```{r}
+# first create the time series object, with frequency = 50, and then apply the stl function.
+temp_s_1=stl(ts(t1$ts1, frequency=50), "periodic")
+temp_s_2=stl(ts(t2$ts2, frequency=50), "periodic")
+```
+*Important*: If you don't know the `frequency`, play a little bit with this parameter until you find a result in which you are comfortable.
+
+#### Finding max and min
+Creating the functions...
+```{r}
+ts_max<-function(signal)
+{
+  points_max=which(diff(sign(diff(signal)))==-2)+1
+  return(points_max)
+}
+
+ts_min<-function(signal)
+{
+  points_min=which(diff(sign(diff(-signal)))==-2)+1
+  return(points_min)
+}
+```
+
+#### Visualzing the results!
+```{r}
+trend_1=as.numeric(temp_s_1$time.series[,2])
+
+max_1=ts_max(trend_1)
+min_1=ts_min(trend_1)
+	
+
+## Plotting final results
+plot(trend_1, type = 'l') 
+abline(v=max_1, col="red") 
+abline(v=min_1, col="blue")
+
+```
+
+#### Comparing two time series
+
+```{r}
+trend_2=as.numeric(temp_s_2$time.series[,2])
+
+max_2=ts_max(trend_2)
+min_2=ts_min(trend_2)
+
+# create two aligned plots	
+par(mfrow=c(2,1))
+
+## Plotting series 1
+plot(trend_1, type = 'l') 
+abline(v=max_1, col="red") 
+abline(v=min_1, col="blue")
+
+## Plotting series 2
+plot(trend_2, type = 'l') 
+abline(v=max_2, col="red") 
+abline(v=min_2, col="blue")
+
+```
