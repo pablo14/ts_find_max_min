@@ -147,6 +147,9 @@ _Note: It´s a common practise to invert negative and positive values._
 
 #### Finally...
   Typically the signal time length for this kind of studies last for **400ms**, thus 1 point per millisecond, just the displayed plots. And the amplitude is in **volts**, _(actually micro-volts)_. The same unit of measurement used by the notebook you are using now ;)
+ 
+<img src="10_brain_computer.PNG" width="200px" alt="Brain & computer">
+
 <br>
 <br>
 <br>
