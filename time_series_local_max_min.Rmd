@@ -1,6 +1,9 @@
-Time Series Analysis - profiling using max & min
+Time Series Analysis Using Max/Min... and some Neuroscience.
 ======
-<img src="01_time_series_analysis.png" width="70px" alt="brain signal">
+<img src="01_time_series_analysis.png" width="150px" alt="brain signal">
+
+_Originally posted at:
+<a href="blog.datascienceheroes.com" target="blank">blog.datascienceheroes.com</a>_
 
 
 ### Introduction
@@ -22,7 +25,10 @@ plot(t2$ts2, type = 'l')
 
 ```
 
-  As you can see there are many peaks, but intuitively you can imagine a more smoother line crossing in the middle of the points. This can achieved by applying an *Seasonal Trend Decomposition* (STL).
+  As you can see there are many peaks, but intuitively you can imagine a more smoother line crossing in the middle of the points. This can achieved by applying a **Seasonal Trend Decomposition** (STL).
+  
+<br>
+<br>
 
 ### Smoothing the series
 ```{r}
@@ -33,7 +39,8 @@ stl_2=stl(ts(t2$ts2, frequency=50), "periodic")
 *Important*: If you don't know the `frequency` beforehand, play a little bit with this parameter until you find a result in which you are comfortable.
 
 <a href="https://anomaly.io/seasonal-trend-decomposition-in-r" target="blank">More STL info</a>  
-
+<br>
+<br>
 
 ### Finding max and min
 Creating the functions...
@@ -50,6 +57,8 @@ ts_min<-function(signal)
   return(points_min)
 }
 ```
+<br>
+<br>
 
 ### Visualizing the results!
 ```{r}
@@ -71,13 +80,14 @@ With the line: `stl_1$time.series[,2]` we are accessing to the time series `tren
 This first series has 3 maximums _(red line)_ and 2 minimum _(blue line)_ in the following places:
 
 ```{r}
-# Max points:
+# When occurs the max points:
 max_1
 
-# Min points:
+# When occurs the min points:
 min_1
 ```
-
+<br>
+<br>
 
 ### Comparing two time series
 
@@ -101,30 +111,44 @@ abline(v=max_2, col="red")
 abline(v=min_2, col="blue")
 
 ```
+<br>
 
 Some **conclusions** from both plots:
-* series 2 starts with a minimum while 1 does with a maximum 
-* series 1 has 3 max and 2 min, just the opposite to the other series
 
-Last points are important because...
+* Series 2 starts with a minimum while 1 does with a maximum 
+* Series 1 has 3 max and 2 min, just the opposite to the other series
+
+Why is this important? Because of the data nature, which is in next section.
+<br>
 
 ### What is this data about?
 
-<img src="brain_signal.PNG" width="70px" alt="brain signal">
+<img src="08_brain_signal.PNG" width="100px" alt="brain signal">
 
-`ts1` and `ts2` are two typical responses to a brain stimulus, in other words: what happen with the brain when a person look at a picture / move a finger / think in a particular thing, etc...
+`ts1` and `ts2` are two typical responses to a brain stimulus, in other words: what happen with the brain when a person look at a picture / move a finger / think in a particular thing, etc...  <a href="https://en.wikipedia.org/wiki/Electroencephalography" target="blank">Electroencephalography</a>.
 
-More info: <a href="https://en.wikipedia.org/wiki/Electroencephalography" target="blank">Electroencephalography</a>
 
-  Some studies in **neurosciences** focus on averaging several responses to one stimulus -for example, to look at one particular picture. They present several times a particular image to the person. Averaging all of these signal/time series, you get the **typical response**.
+  Some studies in **neuroscience** focus on averaging several responses to one stimulus -for example, to look at one particular picture. They present several times a particular image to the person. Averaging all of these signal/time series, you get the **typical response**.
   
   Then you can **predict** based on the similarity between this **typical response** and the **new image** (stimulus) that the person is looking at. 
+<br>
+<br>
 
-More info: <a href="https://en.wikipedia.org/wiki/Event-related_potential" target="blank">Event related potential</a>  
+#### Typical response (or Event Related Potential)
+<img src="09_event_related_potential.PNG" width="200px" alt="event related potential">
 
-Typically there are 400 points per stimulus (1 per millisecond), therefore each plot has 400 points. 
+Important to get the **when** positive (`P1`, `P2` and `P3`) peaks occurs. The same goes for the negative ones.
+
+<a href="https://en.wikipedia.org/wiki/Event-related_potential" target="blank">Wiki: Event related potential</a>.
+
+_Note: It´s a common practise to invert negative and positive values._
+
+<br>
+
+#### Finally...
+  Typically the signal time length for this kind of studies last for **400ms**, thus 1 point per millisecond, just the displayed plots. And the amplitude is in **volts**, _(actually micro-volts)_. The same unit of measurement used by the notebook you are using now ;)
+<br>
+<br>
+<br>
+
   
-  One technique to compare two time series: <a href="http://dtw.r-forge.r-project.org/" target="blank">Dynamic Time Warp</a>  
-
-
-
